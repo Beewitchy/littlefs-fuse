@@ -29,9 +29,9 @@ override CFLAGS += -DLFS_MULTIVERSION
 override CFLAGS += -DLFS_MIGRATE
 
 ifeq ($(OS), Darwin)
-override CFLAGS += -I /usr/local/include/osxfuse
+override CFLAGS += -I /usr/local/include
 override LFLAGS += -L /usr/local/lib
-override LFLAGS += -losxfuse
+override LFLAGS += -lfuse
 else
 override LFLAGS += -lfuse
 endif

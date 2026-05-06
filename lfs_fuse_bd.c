@@ -18,7 +18,7 @@
 #include <sys/disk.h>
 #elif defined(__APPLE__)
 #define BLKSSZGET DKIOCGETBLOCKSIZE
-#define BLKGETSIZE DKIOCGETBLOCKCOUNT
+#define BLKGETSIZE64 DKIOCGETBLOCKCOUNT
 #include <sys/disk.h>
 #else
 #include <sys/ioctl.h>
