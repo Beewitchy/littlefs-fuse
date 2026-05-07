@@ -18,7 +18,7 @@
 #include <sys/disk.h>
 #elif defined(__APPLE__)
 #define BLKSSZGET DKIOCGETBLOCKSIZE
-#define BLKGETSIZE64 DKIOCGETBLOCKCOUNT
+#define BLK_COUNT_MAC DKIOCGETBLOCKCOUNT
 #include <sys/disk.h>
 #else
 #include <sys/ioctl.h>
@@ -46,12 +46,28 @@ int lfs_fuse_bd_create(struct lfs_config *cfg, const char *path) {
 
     // get size in sectors
     if (!cfg->block_count) {
+#if defined(__APPLE__)
+        uint32_t block_size;
+        uint64_t count;
+        uint64_t size;
+        int err = ioctl(fd, BLKSSZGET, &block_size);
+        if (err) {
+            return -errno;
+        }
+        err = ioctl(fd, BLK_COUNT_MAC, &count);
+        if (err) {
+            return -errno;
+        }
+        size = count * block_size;
+        cfg->block_count = size / cfg->block_size;
+#else
         uint64_t size;
         int err = ioctl(fd, BLKGETSIZE64, &size);
         if (err) {
             return -errno;
         }
         cfg->block_count = size / cfg->block_size;
+#endif
     }
 
     // setup function pointers
