@@ -31,10 +31,9 @@ override CFLAGS += -DLFS_MIGRATE
 ifeq ($(OS), Darwin)
 override CFLAGS += -I /usr/local/include
 override LFLAGS += -L /usr/local/lib
-override LFLAGS += -lfuse
-else
-override LFLAGS += -lfuse
 endif
+
+override LFLAGS += -lfuse
 
 ifeq ($(OS), FreeBSD)
 override CFLAGS += -I /usr/local/include
